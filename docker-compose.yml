@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  web:
+    image: nginx:1.21-alpine
+    volumes:
+      - ./public:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+    environment:
+      - NGINX_PORT=80

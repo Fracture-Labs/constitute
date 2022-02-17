@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Constitute</title>
+    
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <h1>Constitute</h1>
+
+    <select name="wallet-select" class="wallet-select" id="walletSelect">
+    </select>
+
+    <div id="clientStatus" class="client-status collapsed">
+      <ul>
+        <li>catchpoint: <span id="catchpoint"></span></li>
+        <li>catchpoint-acquired-blocks: <span id="catchpoint-acquired-blocks"></span></li>
+        <li>catchpoint-processed-accounts: <span id="catchpoint-processed-accounts"></span></li>
+        <li>catchpoint-total-accounts: <span id="catchpoint-total-accounts"></span></li>
+        <li>catchpoint-total-blocks: <span id="catchpoint-total-blocks"></span></li>
+        <li>catchpoint-verified-accounts: <span id="catchpoint-verified-accounts"></span></li>
+        <li>catchup-time: <span id="catchup-time"></span></li>
+        <li>last-catchpoint: <span id="last-catchpoint"></span></li>
+        <li>last-round: <span id="last-round"></span></li>
+        <li>last-version: <span id="last-version"></span></li>
+        <li>next-version: <span id="next-version"></span></li>
+        <li>next-version-round: <span id="next-version-round"></span></li>
+        <li>next-version-supported: <span id="next-version-supported"></span></li>
+        <li>stopped-at-unsupported-round: <span id="stopped-at-unsupported-round"></span></li>
+        <li>time-since-last-round: <span id="time-since-last-round"></span></li>
+      </ul>
+      <a href="#" onclick="this.parentElement.classList.toggle('collapsed')">client status</a>
+    </div>
+
+    <form method="POST" and enctype="multipart/form-data">
+      <fieldset>
+        <fieldset>
+          <legend>Trusted Proxies</legend>
+          <label>Max <input type="number" value="5" min="2" max="10" /></label>
+          <label>Min <input type="number" value="3" min="2" max="10" /></label>
+        </fieldset>
+
+        <input name="payload" id="payload" type="file" name="bytes" />
+        <input type="submit" value="Fracture" />
+      </fieldset>
+    </form>
+
+    <button onclick="generateAlgorandKeypair()">Generate Algorand Keypair</button>
+    <button onclick="accountBalance()">Account Balance</button>
+    <button onclick="accountInfo()">Account Info</button>
+    <button onclick="processFile()">Process File</button>
+
+    <textarea id="log" class="log"></textarea>
+
+    <script src="./js/algosdk.min.js"></script>
+    <script src="./js/actions.js"></script>
+  </body>
+</html>
