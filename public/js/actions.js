@@ -9,16 +9,8 @@ const kmd = new algosdk.Kmd(TOKEN, SERVER, KMD_PORT)
 const displayAddress = addr => `${addr.substr(0,4)}...${addr.substr(-4,4)}`
 const displayBalance = bal => (bal / 1000000).toFixed(4)
 
-const Log = line => document.querySelector("#log").innerHTML += line
-
 // Account Info
 ;(async function updateUI() {
-  const client_status = await algod.status().do();
-  for (k of Object.keys(client_status)) {
-    const el = document.querySelector("#clientStatus")
-    el.querySelector(`#${k}`).innerHTML = client_status[k]
-  }
-
   const { wallets } = await kmd.listWallets();
   const walletSelect = document.querySelector("#walletSelect")
   for ({ id, name } of wallets) {
@@ -48,7 +40,7 @@ async function accountBalance() {
 
   for (addr of addresses) {
     const info = await algod.accountInformation(addr).do()
-    Log(`${info.address} balance: ${info.amount} microAlgos\n`)
+    console.log(`${info.address} balance: ${info.amount} microAlgos\n`)
   }
 }
 
@@ -61,14 +53,23 @@ async function accountInfo() {
 
   for (addr of addresses) {
     const info = await algod.accountInformation(addr).do()
-    Log(`${JSON.stringify(info)}\n`)
+    console.log(`${JSON.stringify(info)}\n`)
   }
 }
 
 // TODO: Secret Key display / storage
 async function generateAlgorandKeypair() {
   const result = await algosdk.generateAccount()
-  Log(`Generated account: ${result.addr}\n`)
+  const mnemonic = await algosdk.secretKeyToMnemonic(result.sk)
+  console.log(`Generated account: ${result.addr}\nMnemonic: ${mnemonic}`)
+}
+
+async function getClientStatus() {
+  const client_status = await algod.status().do();
+  console.log('Client status: \n')
+  for (k of Object.keys(client_status)) {
+    console.log(`${k}: ${client_status[k]}\n`);
+  }
 }
 
 function processFile() {
@@ -83,4 +84,21 @@ function processFile() {
 
   console.log(payload);
   reader.readAsArrayBuffer(payload.files[0]);
+}
+
+function updateFragments() {
+  document.querySelectorAll(".fragments g").forEach(el => {
+    el.classList.remove('selected')
+  })
+
+  const svgGroupId = document.getElementById('numFragments').value
+  const svgGroup = document.getElementById(svgGroupId)
+  svgGroup.classList.toggle("selected")
+
+  const minVouchers = document.getElementById('minVouchers').value
+  const fragments = svgGroup.querySelectorAll('polygon');
+  fragments.forEach(el => el.classList.remove('trustee'))
+  for (let i = 0; i < minVouchers; i++) {
+    fragments[i].classList.add('trustee')
+  }
 }

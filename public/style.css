@@ -1,27 +1,34 @@
+:root {
+  --background-color: #afddaf;
+  --light-accent-color: #2b662b;
+  --accent-color: #2b662b;
+}
+
+body {
+  background-color: var(--background-color);
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 375px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body > form { text-align: center; }
+body > form > label { display: block; }
+body > form input[type="submit"] {
+  width: 100%;
+  padding: 1rem;
+  background: var(--accent-color);
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
 input, button, select { font-family: monospace; }
 
-.wallet-select {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-}
+.actions { position: absolute; left: 1em; bottom: 1em; }
 
-.client-status {
-  font-size: 0.81rem;
-  border: 2px solid #333;
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  background: #e2e2e2;
-  padding: 0.61rem;
-}
-.client-status > a { display: block; text-align: right; color: black; }
-.client-status ul { padding-left: 0; list-style-type: none; display: inherit; }
-.client-status.collapsed ul { display: none; }
-
-textarea.log {
-  display: block;
-  width: 500px;
-  font-family: monospace;
-  height: 500px;
-}
+.fragments { height: 90%; width: 90%; margin: 5%; }
+.fragments g { display: none; }
+.fragments g.selected { display: inherit; }
+.fragments g.selected .trustee { fill: var(--light-accent-color); }

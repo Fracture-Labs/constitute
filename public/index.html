@@ -2,55 +2,69 @@
 <html>
   <head>
     <title>Constitute</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
     <h1>Constitute</h1>
 
-    <select name="wallet-select" class="wallet-select" id="walletSelect">
-    </select>
-
-    <div id="clientStatus" class="client-status collapsed">
-      <ul>
-        <li>catchpoint: <span id="catchpoint"></span></li>
-        <li>catchpoint-acquired-blocks: <span id="catchpoint-acquired-blocks"></span></li>
-        <li>catchpoint-processed-accounts: <span id="catchpoint-processed-accounts"></span></li>
-        <li>catchpoint-total-accounts: <span id="catchpoint-total-accounts"></span></li>
-        <li>catchpoint-total-blocks: <span id="catchpoint-total-blocks"></span></li>
-        <li>catchpoint-verified-accounts: <span id="catchpoint-verified-accounts"></span></li>
-        <li>catchup-time: <span id="catchup-time"></span></li>
-        <li>last-catchpoint: <span id="last-catchpoint"></span></li>
-        <li>last-round: <span id="last-round"></span></li>
-        <li>last-version: <span id="last-version"></span></li>
-        <li>next-version: <span id="next-version"></span></li>
-        <li>next-version-round: <span id="next-version-round"></span></li>
-        <li>next-version-supported: <span id="next-version-supported"></span></li>
-        <li>stopped-at-unsupported-round: <span id="stopped-at-unsupported-round"></span></li>
-        <li>time-since-last-round: <span id="time-since-last-round"></span></li>
-      </ul>
-      <a href="#" onclick="this.parentElement.classList.toggle('collapsed')">client status</a>
-    </div>
+    <p>Keep a file encrypted until your closest allies vouch for its recovery.</p>
 
     <form method="POST" and enctype="multipart/form-data">
-      <fieldset>
-        <fieldset>
-          <legend>Trusted Proxies</legend>
-          <label>Max <input type="number" value="5" min="2" max="10" /></label>
-          <label>Min <input type="number" value="3" min="2" max="10" /></label>
-        </fieldset>
+      <svg class="fragments" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g id="two" class="selected" fill="white" stroke-width="0">
+          <polygon class="trustee" points="0,100  49,0 49,100" />
+          <polygon points="51,100 51,0 100,100" />
+        </g>
+  
+        <g id="three" fill="white" stroke="green" stroke-width="0">
+          <polygon points="0,99   49,58 49,0" />
+          <polygon points="100,99 51,58 51,0" />
+          <polygon points="1,100  50,60 99,100" />
+        </g>
+  
+        <g id="four" fill="white" stroke="green" stroke-width="0">
+          <polygon points="26,49 50,0 74,49" />
+          <polygon points="26,50 74,50 50,99" />
+          <polygon points="0,100 25,50 49,100" />
+          <polygon points="51,100 75,50 100,100" />
+        </g>
+      </svg>
 
-        <input name="payload" id="payload" type="file" name="bytes" />
-        <input type="submit" value="Fracture" />
-      </fieldset>
+      <input name="payload" id="payload" type="file" name="bytes" />
+
+      <br />
+
+      <p>The file will be encrypted, and only decrypted if
+        <select id="minVouchers" onchange="updateFragments()">
+          <option selected value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+        of
+        <select id="numFragments" onchange="updateFragments()">
+          <option selected value="two">2</option>
+          <option value="three">3</option>
+          <option value="four">4</option>
+        </select>
+      trustees vouch for its integrity.</p>
+
+      <input type="submit" value="Encrypt" />
     </form>
+    
+    <small>Learn more about the <a href="./dio.html">DIO</a>.</small>
 
-    <button onclick="generateAlgorandKeypair()">Generate Algorand Keypair</button>
-    <button onclick="accountBalance()">Account Balance</button>
-    <button onclick="accountInfo()">Account Info</button>
-    <button onclick="processFile()">Process File</button>
-
-    <textarea id="log" class="log"></textarea>
+    <div class="actions">
+      <select name="wallet-select" class="wallet-select" id="walletSelect">
+      </select>
+      <button onclick="getClientStatus()">Get Client Status</button>
+      <button onclick="generateAlgorandKeypair()">Generate Algorand Keypair</button>
+      <button onclick="accountBalance()">Account Balance</button>
+      <button onclick="accountInfo()">Account Info</button>
+      <button onclick="processFile()">Process File</button>
+    </div>
 
     <script src="./js/algosdk.min.js"></script>
     <script src="./js/actions.js"></script>
