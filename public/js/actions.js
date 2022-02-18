@@ -86,6 +86,39 @@ function processFile() {
   reader.readAsArrayBuffer(payload.files[0]);
 }
 
+function sendEncryptPayload() {
+  var reader = new FileReader();
+  const payload = document.getElementById('payload').files[0]
+  console.log(payload)
+
+  var bytes = [];
+  reader.onload = async function () {
+    bytes = reader.result
+    let hexEncoded = '';
+
+    new Uint8Array(bytes).forEach(c => {
+      hexEncoded += c.toString(16).padStart(2, "0")
+    })
+
+    const response = await fetch('http://localhost:8000/encrypt', {
+      method: 'POST',
+      mode: 'no-cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({
+        plaintext: hexEncoded
+      })
+    });
+
+    console.log(response)
+  };
+  reader.readAsArrayBuffer(payload);
+}
+
 function updateFragments() {
   document.querySelectorAll(".fragments g").forEach(el => {
     el.classList.remove('selected')
