@@ -14,9 +14,9 @@
     </nav>
 
     <h1>Constitute</h1>
-    <h2>Encrypt</h2>
+    <h2>Decrypt</h2>
 
-    <p>Encrypt, fracture, and entrust your data.</p>
+    <p>When you're ready, signal to your trustees that your data is ready for decryption.</p>
 
     <form method="POST" enctype="multipart/form-data" onsubmit="sendEncryptPayload(); return false;">
       <svg class="fragments" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -39,42 +39,13 @@
         </g>
       </svg>
 
-      <input name="payload" id="payload" type="file" name="bytes" />
-
-      <br />
-
-      <p>The file will be encrypted, and only decrypted if
-        <select id="minVouchers" onchange="updateFragments()">
-          <option selected value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-        of
-        <select id="numFragments" onchange="updateFragments()">
-          <option selected value="two">2</option>
-          <option value="three">3</option>
-          <option value="four">4</option>
-        </select>
-      trustees vouch for its integrity.</p>
-
-      <input class="btn" type="submit" value="Encrypt" />
+      <input class="btn" type="submit" value="Ready to Decrypt" />
     </form>
     
     <small>
       Learn more about the <a href="./dio.html">DIO</a>.
       View the code on <a href="https://github.com/Fracture-Labs/">GitHub</a>.
     </small>
-
-    <div class="actions">
-      <select name="wallet-select" class="wallet-select" id="walletSelect">
-      </select>
-      <button onclick="getClientStatus()">Get Client Status</button>
-      <button onclick="generateAlgorandKeypair()">Generate Algorand Keypair</button>
-      <button onclick="accountBalance()">Account Balance</button>
-      <button onclick="accountInfo()">Account Info</button>
-      <button onclick="processFile()">Process File</button>
-    </div>
 
     <script src="./js/algosdk.min.js"></script>
     <script src="./js/actions.js"></script>
