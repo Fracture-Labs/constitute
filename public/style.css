@@ -2,6 +2,8 @@
   --background-color: #afddaf;
   --light-accent-color: #2b662b;
   --accent-color: #2b662b;
+
+  --trustee-background-color: #fff5c8;
 }
 
 body {
@@ -11,6 +13,7 @@ body {
   max-width: 375px;
   font-family: Arial, Helvetica, sans-serif;
 }
+body.trustee { background-color: var(--trustee-background-color); }
 
 body > form { text-align: center; }
 body > form > label { display: block; }
@@ -36,3 +39,9 @@ input, button, select { font-family: monospace; }
 .fragments g { display: none; }
 .fragments g.selected { display: inherit; }
 .fragments g.selected .trustee { fill: var(--light-accent-color); }
+
+.payloads { width: 100%; margin-bottom: 2rem; }
+.payloads th { text-align: left; }
+.payloads td { padding: 0.25rem; }
+.payloads td:last-child { text-align: center; }
+.payloads tr:nth-child(even) { background-color: #00000013; }

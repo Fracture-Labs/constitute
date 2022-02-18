@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Constitute: Trustee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body class="trustee">
+    <nav>
+      <a href="./index.html">Encrypt</a>
+      <a href="./payloads.html">Payloads</a>
+    </nav>
+
+    <h1>Constitute</h1>
+    <h2>Payloads</h2>
+
+    <p>
+      You have been chosen to steward and vouch for the following pieces of data.
+      When the trustor is ready to decrypt, the respective buttons will become active.
+    </p>
+    
+    <table cellspacing="0" class="payloads">
+      <thead>
+        <tr>
+          <th>ABCD...WXYZ</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Payload #1</td>
+          <td><button class="btn" disabled>Decrypt</button></td>
+        </tr>
+        <tr>
+          <td>Payload #2</td>
+          <td><button class="btn" disabled>Decrypt</button></td>
+        </tr>
+        <tr>
+          <td>Payload #3</td>
+          <td><button class="btn" disabled>Decrypt</button></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <small>
+      Learn more about the <a href="./dio.html">DIO</a>.
+      View the code on <a href="https://github.com/Fracture-Labs/">GitHub</a>.
+    </small>
+
+    <div class="actions">
+      <select name="wallet-select" class="wallet-select" id="walletSelect">
+      </select>
+      <button onclick="getClientStatus()">Get Client Status</button>
+      <button onclick="generateAlgorandKeypair()">Generate Algorand Keypair</button>
+      <button onclick="accountBalance()">Account Balance</button>
+      <button onclick="accountInfo()">Account Info</button>
+      <button onclick="processFile()">Process File</button>
+    </div>
+
+    <script src="./js/algosdk.min.js"></script>
+    <script src="./js/actions.js"></script>
+  </body>
+</html>
