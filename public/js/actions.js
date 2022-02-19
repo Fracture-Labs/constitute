@@ -132,7 +132,7 @@ function sendEncryptPayload() {
       body: JSON.stringify({
         plaintext: hexEncoded,
 		    wallet_address: sender,
-		    app_id: APP_ID
+		    app_id: APP_ID.toString()
       })
     });
 	  console.log("Encrypt endpoint: ", response)
