@@ -119,7 +119,7 @@ function sendEncryptPayload() {
       hexEncoded += c.toString(16).padStart(2, "0")
     })
 
-    const sender = document.getElementById("walletSelect").value
+    let sender = document.getElementById("walletSelect").value
     const response = await fetch('http://127.0.0.1:8000/encrypt', {
       method: 'POST',
       mode: 'no-cors',
@@ -131,40 +131,40 @@ function sendEncryptPayload() {
       referrerPolicy: 'no-referrer',
       body: JSON.stringify({
         plaintext: hexEncoded,
-		wallet_address: sender,
-		  app_id: APP_ID
+		    wallet_address: sender,
+		    app_id: APP_ID
       })
     });
-	console.log("Encrypt endpoint: ", response)
+	  console.log("Encrypt endpoint: ", response)
 
     const minVouchers = document.getElementById('minVouchers').value
     const trustees = []
     const svgGroupId = document.getElementById('numFragments').value
     const svgGroup = document.getElementById(svgGroupId)
     const fragments = svgGroup.querySelectorAll('polygon');
-	for (let i = 0; i < fragments.length; i++) {
-	  k = fragments[i].dataset.publicKey
-		trustees.push(k)
-	}
+    for (let i = 0; i < fragments.length; i++) {
+      k = fragments[i].dataset.publicKey
+      trustees.push(k)
+    }
     console.log("trustees: ", trustees)
     const suggestedParams = await algod.getTransactionParams().do();
 
-    const sender = document.getElementById("walletSelect").value
+    sender = document.getElementById("walletSelect").value
     const {wallets} = await kmd.listWallets()
     const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '')
     const threshold = parseInt(minVouchers)
     const appArgs = new Uint8Array([threshold])
     const optInTxn = algosdk.makeApplicationOptInTxn(
-       sender,
- 	   suggestedParams,
-	   APP_ID,
-       [appArgs],
-	   trustees,
- 	);
+      sender,
+      suggestedParams,
+      APP_ID,
+      [appArgs],
+      trustees,
+    );
     // send the transaction
     const signedOptInTxn = await kmd.signTransaction(wallet_handle_token, '', optInTxn);
     const { txId } = await algod.sendRawTransaction(signedOptInTxn).do();
-	console.log("new web of trust txId: ", txId )
+	  console.log("new web of trust txId: ", txId )
    };
 
    reader.readAsArrayBuffer(payload);
