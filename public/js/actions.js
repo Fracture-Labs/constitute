@@ -44,6 +44,10 @@ async function accountInfo() {
   console.log(`${JSON.stringify(info)}\n`)
 }
 
+async function wait(txId){
+		return await algodsdk.waitForConfirmation(txId)
+}
+
 // TODO: Secret Key display / storage
 async function generateAlgorandKeypair() {
   const result = await algosdk.generateAccount()
@@ -115,36 +119,38 @@ function sendEncryptPayload() {
       hexEncoded += c.toString(16).padStart(2, "0")
     })
 
-    const response = await fetch('http://localhost:8000/encrypt', {
-      method: 'POST',
-      mode: 'no-cors',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({
-        plaintext: hexEncoded
-      })
-    });
-	console.log("Encrypt endpoint: ", response)
+    // const response = await fetch('http://localhost:8000/encrypt', {
+    //   method: 'POST',
+    //   mode: 'no-cors',
+    //   cache: 'no-cache',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   redirect: 'follow',
+    //   referrerPolicy: 'no-referrer',
+    //   body: JSON.stringify({
+    //     plaintext: hexEncoded
+    //   })
+    // });
+	// console.log("Encrypt endpoint: ", response)
 
     const minVouchers = document.getElementById('minVouchers').value
     const trustees = []
     const svgGroupId = document.getElementById('numFragments').value
     const svgGroup = document.getElementById(svgGroupId)
     const fragments = svgGroup.querySelectorAll('polygon');
-	for (let i = 0; i < minVouchers; i++) {
+	for (let i = 0; i < fragments.length; i++) {
 	  k = fragments[i].dataset.publicKey
 		trustees.push(k)
 	}
+    console.log("trustees: ", trustees)
     const suggestedParams = await algod.getTransactionParams().do();
 
     const sender = document.getElementById("walletSelect").value
     const {wallets} = await kmd.listWallets()
     const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '')
-		  const appArgs = new Uint8Array()
+    const threshold = parseInt(minVouchers)
+    const appArgs = new Uint8Array([threshold])
     const optInTxn = algosdk.makeApplicationOptInTxn(
        sender,
  	   suggestedParams,
@@ -155,10 +161,40 @@ function sendEncryptPayload() {
     // send the transaction
     const signedOptInTxn = await kmd.signTransaction(wallet_handle_token, '', optInTxn);
     const { txId } = await algod.sendRawTransaction(signedOptInTxn).do();
-	console.log("txId: ", txId )
+	console.log("new web of trust txId: ", txId )
    };
 
    reader.readAsArrayBuffer(payload);
+
+}
+
+async function approveDecrypt() {
+
+    const suggestedParams = await algod.getTransactionParams().do();
+    const sender = document.getElementById("walletSelect").value;
+    const delegatee = document.getElementById("k_pk").dataset.address;
+    console.log(delegatee) 
+    const {wallets} = await kmd.listWallets();
+    const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '');
+    const noOpCall = [] 
+	const noOpCallname = "reqKfrags";
+    for (var i = 0; i < noOpCallname.length; i++){  
+        noOpCall.push(noOpCallname.charCodeAt(i));
+    }
+    const appArg0 = new Uint8Array(noOpCall)
+    const noOptTx = algosdk.makeApplicationNoOpTxn(
+       sender,
+ 	   suggestedParams,
+	   APP_ID,
+       [appArg0],
+	   [delegatee],
+ 	);
+    // send the transaction
+    const signedNoOptTx = await kmd.signTransaction(wallet_handle_token, '', noOptTx);
+    const { txId } = await algod.sendRawTransaction(signedNoOptTx).do();
+	console.log("txId: ", txId )
+
+    // Wait for a few seconds then hit the set_cfrag on kfraas
 
 }
 

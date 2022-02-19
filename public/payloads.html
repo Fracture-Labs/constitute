@@ -30,8 +30,8 @@
       </thead>
       <tbody>
         <tr>
-          <td>Payload #1</td>
-          <td><button class="btn">Ready to Decrypt</button></td>
+		  <td>Payload for PLXM... </td>
+          <td><button class="btn" onclick=approveDecrypt()>Ready to Decrypt</button></td>
         </tr>
       </tbody>
     </table>
@@ -39,7 +39,7 @@
     <table cellspacing="0" class="payloads">
       <thead>
         <tr>
-          <th id="k_pk"></th>
+          <th id="k_pk" data-address="PLXMLLXICWTTNV4DUKLTYGCTKA2OVFBQMTSPUTEMSS4X4VBAZO45UW7H54"></th>
           <th></th>
         </tr>
       </thead>
@@ -65,6 +65,5 @@
 
     <script src="./js/algosdk.min.js"></script>
     <script src="./js/actions.js"></script>
-    <script>pollPayloads()</script>
   </body>
 </html>
