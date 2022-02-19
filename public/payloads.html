@@ -24,23 +24,27 @@
     <table cellspacing="0" class="payloads">
       <thead>
         <tr>
-          <th>ABCD...WXYZ</th>
+          <th>Your Payloads</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Payload #1</td>
-          <td><button class="btn" disabled>Decrypt</button></td>
+          <td><button class="btn">Ready to Decrypt</button></td>
         </tr>
+      </tbody>
+    </table>
+
+    <table cellspacing="0" class="payloads">
+      <thead>
         <tr>
-          <td>Payload #2</td>
-          <td><button class="btn" disabled>Decrypt</button></td>
+          <th id="k_pk"></th>
+          <th></th>
         </tr>
-        <tr>
-          <td>Payload #3</td>
-          <td><button class="btn" disabled>Decrypt</button></td>
-        </tr>
+      </thead>
+      <tbody id="payloadList">
+        
       </tbody>
     </table>
     
@@ -61,5 +65,6 @@
 
     <script src="./js/algosdk.min.js"></script>
     <script src="./js/actions.js"></script>
+    <script>pollPayloads()</script>
   </body>
 </html>

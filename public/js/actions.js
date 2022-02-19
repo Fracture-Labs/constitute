@@ -59,6 +59,34 @@ async function getClientStatus() {
   }
 }
 
+function pollPayloads() {
+  setInterval(async () => {
+    const res = await fetch("http://localhost:8010/proxy/status", {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const status = await res.json()
+    const payloadList = document.getElementById('payloadList')
+    payloadList.innerHTML = ''
+
+    const payloadRow = `<tr>
+          <td>${displayAddress(status.d_capsule_cid)}</td>
+          <td>
+            <button
+              class="btn"
+              data-capsule-cid="${status.d_capsule_cid}
+              data-ciphertext-cid="${status.d_ciphertext_cid}
+              disabled>Decrypt
+            </button>
+          </td>
+        </tr>`
+
+    document.getElementById('k_pk').innerHTML = displayAddress(status.k_pk)
+    payloadList.insertAdjacentHTML('beforeend', payloadRow)
+  }, 5000)
+}
+
 function processFile() {
   const payload = document.getElementById('payload')
 
