@@ -13,20 +13,48 @@ body {
   max-width: 375px;
   font-family: Arial, Helvetica, sans-serif;
 }
-body.trustee { background-color: var(--trustee-background-color); }
+body.trustee {
+  background-color: var(--trustee-background-color);
+}
 
-body > form { text-align: center; }
-body > form > label { display: block; }
-body > form input[type="submit"] { width: 100%; }
+body > form {
+  text-align: center;
+}
+body > form > label {
+  display: block;
+}
+body > form input[type="submit"] {
+  width: 100%;
+}
 
-body > h1 { margin-top: 0;}
+body > h1 {
+  margin-top: 0;
+}
 
-body > nav { position: absolute; top: 1rem; right: 1rem; font-size: 0.8rem; }
-body > nav > a { padding: 0.3rem !important; display: block; margin-bottom: 0.25rem; }
+body > nav {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.8rem;
+}
+body > nav > a {
+  padding: 0.3rem !important;
+  display: block;
+  margin-bottom: 0.25rem;
+}
 
-input, button, select { font-family: monospace; }
+input,
+button,
+select {
+  font-family: monospace;
+}
 
-.actions { display: none; position: absolute; left: 1em; bottom: 1em; }
+.actions {
+  display: none;
+  position: absolute;
+  left: 1em;
+  bottom: 1em;
+}
 
 .btn {
   background: var(--accent-color);
@@ -38,15 +66,38 @@ input, button, select { font-family: monospace; }
   text-decoration: none;
   text-align: center;
 }
-.btn:disabled { opacity: 0.5; }
+.btn:disabled {
+  opacity: 0.5;
+}
 
-.fragments { height: 90%; width: 90%; margin: 5%; }
-.fragments g { display: none; }
-.fragments g.selected { display: inherit; }
-.fragments g.selected .trustee { fill: var(--light-accent-color); }
+.fragments {
+  height: 90%;
+  width: 90%;
+  margin: 5%;
+}
+.fragments g {
+  display: none;
+}
+.fragments g.selected {
+  display: inherit;
+}
+.fragments g.selected .trustee {
+  fill: var(--light-accent-color);
+}
 
-.payloads { width: 100%; margin-bottom: 2rem; }
-.payloads th { text-align: left; }
-.payloads td { padding: 0.25rem; }
-.payloads td:last-child { text-align: center; }
-.payloads tr:nth-child(even) { background-color: #00000013; }
+.payloads {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.payloads th {
+  text-align: left;
+}
+.payloads td {
+  padding: 0.25rem;
+}
+.payloads td:last-child {
+  text-align: center;
+}
+.payloads tr:nth-child(even) {
+  background-color: #00000013;
+}
