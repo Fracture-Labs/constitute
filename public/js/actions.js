@@ -119,20 +119,23 @@ function sendEncryptPayload() {
       hexEncoded += c.toString(16).padStart(2, "0")
     })
 
-    // const response = await fetch('http://localhost:8000/encrypt', {
-    //   method: 'POST',
-    //   mode: 'no-cors',
-    //   cache: 'no-cache',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow',
-    //   referrerPolicy: 'no-referrer',
-    //   body: JSON.stringify({
-    //     plaintext: hexEncoded
-    //   })
-    // });
-	// console.log("Encrypt endpoint: ", response)
+    const sender = document.getElementById("walletSelect").value
+    const response = await fetch('http://127.0.0.1:8000/encrypt', {
+      method: 'POST',
+      mode: 'no-cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({
+        plaintext: hexEncoded,
+		wallet_address: sender,
+		  app_id: APP_ID
+      })
+    });
+	console.log("Encrypt endpoint: ", response)
 
     const minVouchers = document.getElementById('minVouchers').value
     const trustees = []
