@@ -32,7 +32,6 @@ const walletAddresses = []
       walletSelect.insertAdjacentHTML('beforeend', option)
     }
   }
-  updateFragments()
 })().catch((e) => {
   console.log(e);
 })
