@@ -2,12 +2,15 @@ const ALGOD_PORT = 4001;
 const KMD_PORT = 4002;
 const TOKEN = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 const SERVER = 'http://127.0.0.1';
+// THIS NEEDS TO BE CHANGED PER DEPLOY
+const APP_ID = 1
 
 const algod = new algosdk.Algodv2(TOKEN, SERVER, ALGOD_PORT);
 const kmd = new algosdk.Kmd(TOKEN, SERVER, KMD_PORT)
 
 const displayAddress = addr => `${addr.substr(0,4)}...${addr.substr(-4,4)}`
 const displayBalance = bal => (bal / 1000000).toFixed(4)
+const walletAddresses = []
 
 // Account Info
 ;(async function updateUI() {
@@ -21,6 +24,7 @@ const displayBalance = bal => (bal / 1000000).toFixed(4)
     const { wallet_handle_token } = await kmd.initWalletHandle(id, '')
     const { addresses } = await kmd.listKeys(wallet_handle_token)
     for (addr of addresses) {
+      walletAddresses.push(addr)
       const info = await algod.accountInformation(addr).do()
       const option = `<option value=${addr}>
         ${displayAddress(addr)} ${displayBalance(info.amount)} ALGO
@@ -28,33 +32,16 @@ const displayBalance = bal => (bal / 1000000).toFixed(4)
       walletSelect.insertAdjacentHTML('beforeend', option)
     }
   }
+  updateFragments()
 })().catch((e) => {
   console.log(e);
 })
 
-async function accountBalance() {
-  const walletId = document.getElementById("walletSelect").value
-  const { wallet_handle_token } = await kmd.initWalletHandle(walletId, '')
-  const wallet = await kmd.getWallet(wallet_handle_token)
-  const { addresses } = await kmd.listKeys(wallet_handle_token)
-
-  for (addr of addresses) {
-    const info = await algod.accountInformation(addr).do()
-    console.log(`${info.address} balance: ${info.amount} microAlgos\n`)
-  }
-}
-
 async function accountInfo() {
   // TODO: Dedupe code
-  const walletId = document.getElementById("walletSelect").value
-  const { wallet_handle_token } = await kmd.initWalletHandle(walletId, '')
-  const wallet = await kmd.getWallet(wallet_handle_token)
-  const { addresses } = await kmd.listKeys(wallet_handle_token)
-
-  for (addr of addresses) {
-    const info = await algod.accountInformation(addr).do()
-    console.log(`${JSON.stringify(info)}\n`)
-  }
+  const addr = document.getElementById("walletSelect").value
+  const info = await algod.accountInformation(addr).do()
+  console.log(`${JSON.stringify(info)}\n`)
 }
 
 // TODO: Secret Key display / storage
@@ -113,10 +100,38 @@ function sendEncryptPayload() {
         plaintext: hexEncoded
       })
     });
+	console.log("Encrypt endpoint: ", response)
 
-    console.log(response)
-  };
-  reader.readAsArrayBuffer(payload);
+    const minVouchers = document.getElementById('minVouchers').value
+    const trustees = []
+    const svgGroupId = document.getElementById('numFragments').value
+    const svgGroup = document.getElementById(svgGroupId)
+    const fragments = svgGroup.querySelectorAll('polygon');
+	for (let i = 0; i < minVouchers; i++) {
+	  k = fragments[i].dataset.publicKey
+		trustees.push(k)
+	}
+    const suggestedParams = await algod.getTransactionParams().do();
+
+    const sender = document.getElementById("walletSelect").value
+    const {wallets} = await kmd.listWallets()
+    const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '')
+		  const appArgs = new Uint8Array()
+    const optInTxn = algosdk.makeApplicationOptInTxn(
+       sender,
+ 	   suggestedParams,
+	   APP_ID,
+       [appArgs],
+	   trustees,
+ 	);
+    // send the transaction
+    const signedOptInTxn = await kmd.signTransaction(wallet_handle_token, '', optInTxn);
+    const { txId } = await algod.sendRawTransaction(signedOptInTxn).do();
+	console.log("txId: ", txId )
+   };
+
+   reader.readAsArrayBuffer(payload);
+
 }
 
 function updateFragments() {
@@ -130,8 +145,12 @@ function updateFragments() {
 
   const minVouchers = document.getElementById('minVouchers').value
   const fragments = svgGroup.querySelectorAll('polygon');
-  fragments.forEach(el => el.classList.remove('trustee'))
+  fragments.forEach(el => {
+	el.classList.remove('trustee')
+	el.dataset.publicKey = walletAddresses.pop()
+  })
   for (let i = 0; i < minVouchers; i++) {
     fragments[i].classList.add('trustee')
   }
 }
+
