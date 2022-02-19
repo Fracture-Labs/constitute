@@ -75,18 +75,19 @@ function pollPayloads() {
     payloadList.innerHTML = ''
 
     const payloadRow = `<tr>
-          <td>${displayAddress(status.d_capsule_cid)}</td>
+          <td>${displayAddress(status.d_ciphertext_cid)}</td>
           <td>
             <button
               class="btn"
               data-capsule-cid="${status.d_capsule_cid}
               data-ciphertext-cid="${status.d_ciphertext_cid}
-              disabled>Decrypt
+              ${status.can_decrypt === "true" ? "" : "disabled"}
+              >Decrypt
             </button>
           </td>
         </tr>`
 
-    document.getElementById('k_pk').innerHTML = displayAddress(status.k_pk)
+    document.getElementById('k_pk').innerHTML = displayAddress(status.wallet_address)
     payloadList.insertAdjacentHTML('beforeend', payloadRow)
   }, 5000)
 }
