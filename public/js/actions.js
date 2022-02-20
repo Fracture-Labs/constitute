@@ -43,8 +43,17 @@ async function accountInfo() {
   console.log(`${JSON.stringify(info)}\n`)
 }
 
-async function wait(txId){
-		return await algodsdk.waitForConfirmation(txId)
+async function approveDecrypt() {
+  const res = await fetch('http://127.0.0.1:8000/decrypt', {
+    method: 'POST',
+    mode: 'no-cors',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer'
+  })
 }
 
 // TODO: Secret Key display / storage
@@ -173,16 +182,11 @@ function sendEncryptPayload() {
 
 }
 
-async function approveDecrypt() {
-  const res = await fetch('http://127.0.0.1:8000/decrypt', {
-    method: 'POST',
-    mode: 'no-cors',
-    cache: 'no-cache',
+async function recoverPlaintext() {
+  const res = await fetch("http://localhost:8011/proxy/plaintext", {
     headers: {
       'Content-Type': 'application/json'
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer'
+    }
   })
 }
 
