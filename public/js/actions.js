@@ -71,6 +71,7 @@ function pollPayloads() {
     })
     const status = await res.json()
     const payloadList = document.getElementById('payloadList')
+    document.getElementById("k_pk").dataset.address = status.wallet_address
     payloadList.innerHTML = ''
 
     const payloadRow = `<tr>
@@ -81,6 +82,7 @@ function pollPayloads() {
               data-capsule-cid="${status.d_capsule_cid}
               data-ciphertext-cid="${status.d_ciphertext_cid}
               ${status.can_decrypt === "true" ? "" : "disabled"}
+              onclick="trusteeDecrypt()"
               >Decrypt
             </button>
           </td>
@@ -172,33 +174,56 @@ function sendEncryptPayload() {
 }
 
 async function approveDecrypt() {
+  const res = await fetch('http://127.0.0.1:8000/decrypt', {
+    method: 'POST',
+    mode: 'no-cors',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer'
+  })
+}
 
-    const suggestedParams = await algod.getTransactionParams().do();
-    const sender = document.getElementById("walletSelect").value;
-    const delegatee = document.getElementById("k_pk").dataset.address;
-    console.log(delegatee) 
-    const {wallets} = await kmd.listWallets();
-    const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '');
-    const noOpCall = [] 
+async function trusteeDecrypt() {
+  const suggestedParams = await algod.getTransactionParams().do();
+  const sender = document.getElementById("walletSelect").value;
+  const delegatee = document.getElementById("k_pk").dataset.address;
+  const {wallets} = await kmd.listWallets();
+  const { wallet_handle_token } = await kmd.initWalletHandle(wallets[0]["id"], '');
+  const noOpCall = []
 	const noOpCallname = "reqKfrags";
-    for (var i = 0; i < noOpCallname.length; i++){  
-        noOpCall.push(noOpCallname.charCodeAt(i));
-    }
-    const appArg0 = new Uint8Array(noOpCall)
-    const noOptTx = algosdk.makeApplicationNoOpTxn(
-       sender,
- 	   suggestedParams,
-	   APP_ID,
-       [appArg0],
-	   [delegatee],
+  for (var i = 0; i < noOpCallname.length; i++) {
+    noOpCall.push(noOpCallname.charCodeAt(i));
+  }
+  const appArg0 = new Uint8Array(noOpCall)
+  const noOptTx = algosdk.makeApplicationNoOpTxn(
+    sender,
+    suggestedParams,
+	  APP_ID,
+    [appArg0],
+	  [delegatee],
  	);
-    // send the transaction
-    const signedNoOptTx = await kmd.signTransaction(wallet_handle_token, '', noOptTx);
-    const { txId } = await algod.sendRawTransaction(signedNoOptTx).do();
+
+  // send the transaction
+  const signedNoOptTx = await kmd.signTransaction(wallet_handle_token, '', noOptTx);
+  const { txId } = await algod.sendRawTransaction(signedNoOptTx).do();
 	console.log("txId: ", txId )
 
-    // Wait for a few seconds then hit the set_cfrag on kfraas
-
+  // Wait for a few seconds then hit the set_cfrag on kfraas
+  setTimeout(async () => {
+    const res = await fetch('http://127.0.0.1:8010/proxy/send_cfrag', {
+      method: 'POST',
+      mode: 'no-cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer'
+    })
+  }, 5000)
 }
 
 function updateFragments() {
